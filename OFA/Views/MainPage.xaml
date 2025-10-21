@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="OFA.Views.MainPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    Title="Lista de Compras">
+
+    <VerticalStackLayout Padding="12" Spacing="10">
+
+        <!-- Entrada rápida -->
+        <HorizontalStackLayout Spacing="8">
+            <Entry Placeholder="Agregar producto..." HorizontalOptions="FillAndExpand" 
+                   Text="{Binding NewItemName}" />
+            <Entry WidthRequest="60" Keyboard="Numeric" Text="{Binding NewItemQuantity}" />
+            <Button Text="Añadir" Command="{Binding AddItemCommand}" />
+        </HorizontalStackLayout>
+
+        <!-- Filtro / búsqueda -->
+        <Entry Placeholder="Buscar por nombre o categoría..." Text="{Binding FilterText}" />
+
+        <!-- Lista -->
+        <CollectionView ItemsSource="{Binding Items}" SelectionMode="None">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <SwipeView>
+                        <SwipeView.RightItems>
+                            <SwipeItems Mode="Execute">
+                                <SwipeItem Text="Eliminar" BackgroundColor="Red" 
+                                           Invoked="OnSwipeDelete"/>
+                            </SwipeItems>
+                        </SwipeView.RightItems>
+
+                        <Grid Padding="8" ColumnDefinitions="Auto,*,Auto" RowDefinitions="Auto">
+                            <CheckBox IsChecked="{Binding IsBought}" VerticalOptions="Center" 
+                                      CheckedChanged="OnCheckedChanged"/>
+                            <StackLayout Grid.Column="1" Spacing="2">
+                                <Label Text="{Binding Name}" FontAttributes="Bold" />
+                                <Label Text="{Binding Category}" FontSize="12" IsVisible="{Binding Category, Converter={StaticResource NullToBoolConverter}}" />
+                            </StackLayout>
+                            <Label Grid.Column="2" Text="{Binding Quantity}" VerticalOptions="Center"/>
+                        </Grid>
+                    </SwipeView>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <Button Text="Refrescar" Command="{Binding RefreshCommand}" />
+
+    </VerticalStackLayout>
+</ContentPage>
